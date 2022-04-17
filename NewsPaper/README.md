@@ -1,0 +1,1 @@
+# skillfactory_fpw / сквозной проект NewsPaper
