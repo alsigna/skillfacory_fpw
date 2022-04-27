@@ -1,0 +1,21 @@
+{% extends 'default.html' %}
+{% load custom_filters %}
+
+{% block title %}
+Пост
+{% endblock title %}
+
+{% block content %}
+<h1>Пост</h1>
+<hr>
+
+<b>Дата публикации:</b> {{ post.create_time|date:'M d, Y' }}<br>
+<b>Время публикации:</b> {{ post.create_time|date:'G:i' }}<br>
+<b>Автор:</b> {{ post.author.user.username }}<br>
+<b>Название:</b> {{ post.title|censor }}<br>
+<br>
+<b>Текст:</b><br>
+{{ post.text|censor }}
+
+
+{% endblock content %}

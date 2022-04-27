@@ -1,4 +1,4 @@
-"""NewsPaper URL Configuration
+"""config URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.0/topics/http/urls/
@@ -18,5 +18,8 @@ from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("news/", include("news.urls")),
+    # path("pages/", include("django.contrib.flatpages.urls")),
+    # Делаем так, чтобы все адреса из нашего приложения (simpleapp/urls.py)
+    # подключались к главному приложению с префиксом products/.
+    path("products/", include("simpleapp.urls")),
 ]

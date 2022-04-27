@@ -1,0 +1,26 @@
+{% extends 'default.html' %}
+
+{% block title %}
+Посты
+{% endblock title %}
+
+{% block content %}
+<h1>Список постов</h1>
+<hr>
+
+<table>
+    <tr>
+        <th>Заголовок</th>
+        <th>Дата публикации</th>
+        <th>Содержание</th>
+    </tr>
+    {% for post in posts %}
+    <tr>
+        <td><a href="{% url 'post' post.id %}">{{ post.title|truncatechars:20 }}</a></td>
+        <td>{{ post.create_time }}</td>
+        <td>{{ post.text|truncatechars:100 }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock content %}
