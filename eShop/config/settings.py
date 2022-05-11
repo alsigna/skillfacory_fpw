@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-mfr$=t#opel-gk%4@(0#qh1uovc2f6!3^=a1f=0rvxgp)!og51
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_filters",
     "simpleapp",
 ]
 
