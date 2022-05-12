@@ -7,12 +7,18 @@
 
 {% block content %}
 <h1>Пост</h1>
+<a class="btn btn-success" href="{% url 'post_list' %}">List</a>
+<a class="btn btn-warning" href="{% url 'post_edit' post.id %}">Edit</a>
+<a class="btn btn-danger" href="{% url 'post_delete' post.id %}">Delete</a>
 <hr>
 
 <b>Дата публикации:</b> {{ post.create_time|date:'M d, Y' }}<br>
 <b>Время публикации:</b> {{ post.create_time|date:'G:i' }}<br>
 <b>Автор:</b> {{ post.author.user.username }}<br>
 <b>Название:</b> {{ post.title|censor }}<br>
+<b>Тип публикации:</b> {{ post.post_type|censor }}<br>
+<b>Категория:</b> {{ post.category.all|join:", " }}
+<br>
 <br>
 <b>Текст:</b><br>
 {{ post.text|censor }}
