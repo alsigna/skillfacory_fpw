@@ -1,8 +1,14 @@
 # Импортируем класс, который говорит нам о том,
 # что в этом представлении мы будем выводить список объектов из БД
 from datetime import datetime
+from pydoc import resolve
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse
 
 from django.views.generic import DetailView, ListView
+
+from .forms import ProductForm
 
 from .filters import ProductFilter
 from .models import Product
@@ -59,3 +65,13 @@ class ProductDetail(DetailView):
     template_name = "product.html"
     # Название объекта, в котором будет выбранный пользователем продукт
     context_object_name = "product"
+
+
+def create_product(request):
+    form = ProductForm()
+    if request.method == "POST":
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("product_list"))
+    return render(request, "product_edit.html", {"form": form})
