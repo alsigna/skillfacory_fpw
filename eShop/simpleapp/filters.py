@@ -20,7 +20,7 @@ class ProductFilter(FilterSet):
         # будет производиться фильтрация.
         fields = {
             # поиск по названию
-            "name": ["icontains"],
+            "name": ["icontains", "istartswith"],
             # количество товаров должно быть больше или равно
             "quantity": ["gt"],
             "price": [
