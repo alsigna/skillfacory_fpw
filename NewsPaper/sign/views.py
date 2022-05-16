@@ -6,7 +6,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import View
 from django.views.generic.edit import CreateView
-
+from news.models import Author, Post
 from .forms import UserForm
 
 
@@ -51,6 +51,7 @@ def upgrade_author(request):
     author_group = Group.objects.get(name="author")
     if not request.user.groups.filter(name="author").exists():
         author_group.user_set.add(user)
+        Author.objects.update_or_create(user=user)
     return redirect(reverse("profile"))
 
 
@@ -58,6 +59,7 @@ def upgrade_author(request):
 def downgrade_author(request):
     user = request.user
     author_group = Group.objects.get(name="author")
-    if request.user.groups.filter(name="author").exists():
+    if request.user.groups.filter(name="author").exists() and not Post.objects.filter(author__user=user):
         author_group.user_set.remove(user)
+        Author.objects.get(user=user).delete()
     return redirect(reverse("profile"))

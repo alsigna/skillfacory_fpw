@@ -1,11 +1,11 @@
 import django
-from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.urls import reverse, reverse_lazy
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
-from .models import Post
 from .filters import PostFilter
-from .forms import PostEditForm, PostCreateForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import PostCreateForm, PostEditForm
+from .models import Post
 
 
 class PostList(ListView):
@@ -36,7 +36,8 @@ class PostDetail(DetailView):
     context_object_name = "post"
 
 
-class PostCreate(LoginRequiredMixin, CreateView):
+class PostCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    permission_required = ("news.add_post",)
     form_class = PostCreateForm
     model = Post
     template_name = "news/post_edit.html"
@@ -47,7 +48,8 @@ class PostCreate(LoginRequiredMixin, CreateView):
         return context
 
 
-class PostUpdate(LoginRequiredMixin, UpdateView):
+class PostUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    permission_required = ("news.change_post",)
     form_class = PostEditForm
     model = Post
     template_name = "news/post_edit.html"
@@ -58,7 +60,8 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
         return context
 
 
-class PostDelete(LoginRequiredMixin, DeleteView):
+class PostDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    permission_required = ("news.delete_post",)
     model = Post
     template_name = "news/post_delete.html"
     success_url = reverse_lazy("post_list")
