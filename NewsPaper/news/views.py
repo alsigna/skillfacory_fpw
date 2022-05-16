@@ -1,9 +1,11 @@
+import django
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 
 from .models import Post
 from .filters import PostFilter
 from .forms import PostEditForm, PostCreateForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class PostList(ListView):
@@ -34,7 +36,7 @@ class PostDetail(DetailView):
     context_object_name = "post"
 
 
-class PostCreate(CreateView):
+class PostCreate(LoginRequiredMixin, CreateView):
     form_class = PostCreateForm
     model = Post
     template_name = "news/post_edit.html"
@@ -45,7 +47,7 @@ class PostCreate(CreateView):
         return context
 
 
-class PostUpdate(UpdateView):
+class PostUpdate(LoginRequiredMixin, UpdateView):
     form_class = PostEditForm
     model = Post
     template_name = "news/post_edit.html"
@@ -56,7 +58,7 @@ class PostUpdate(UpdateView):
         return context
 
 
-class PostDelete(DeleteView):
+class PostDelete(LoginRequiredMixin, DeleteView):
     model = Post
     template_name = "news/post_delete.html"
     success_url = reverse_lazy("post_list")

@@ -1,0 +1,30 @@
+{% extends "default.html" %}
+
+{% block title %}
+Account
+{% endblock title %}
+
+{% block content %}
+<h1>Account</h1>
+<form action="" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <!-- <a class="btn btn-secondary" href="{{ return_url }}">Cancel</a> -->
+    <input class="btn btn-success" type="submit" value="Save" />
+
+</form>
+
+<br>
+User groups:
+{% for group in request.user.groups.all %}
+<li>{{ group }}</li>
+{% endfor %}
+<br>
+
+{% if is_author %}
+<a class="btn btn-warning" href="/sign/downgrade/">remove author</a>
+{% else %}
+<a class="btn btn-warning" href="/sign/upgrade/">add author</a>
+{% endif %}
+
+{% endblock content %}

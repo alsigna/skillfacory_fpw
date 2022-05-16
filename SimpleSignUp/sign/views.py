@@ -18,5 +18,4 @@ def upgrade_me(request):
     premium_group = Group.objects.get(name="premium")
     if not request.user.groups.filter(name="premium").exists():
         premium_group.user_set.add(user)
-        print("doneski")
     return redirect("/")
