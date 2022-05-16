@@ -1,17 +1,13 @@
 from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group, User
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
-from django.views.generic import UpdateView, View
-from news.models import Author
+from django.views.generic import View
 from django.views.generic.edit import CreateView
-from django.contrib.auth.decorators import login_required
 
 from .forms import UserForm
-
-# from .forms import BaseRegisterForm
 
 
 class ProfileUpdate(LoginRequiredMixin, View):

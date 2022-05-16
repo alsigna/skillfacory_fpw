@@ -150,4 +150,4 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = "username"
 ACCOUNT_EMAIL_VERIFICATION = "none"
-# ACCOUNT_FORMS = {"signup": "sign.models.BasicSignupForm"}
+ACCOUNT_FORMS = {"signup": "sign.forms.BasicSignupForm"}
