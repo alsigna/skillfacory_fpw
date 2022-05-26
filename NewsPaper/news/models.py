@@ -25,6 +25,7 @@ class Author(models.Model):
 
 class Category(models.Model):
     category = models.CharField(max_length=256, unique=True)
+    subscribers = models.ManyToManyField(User, related_name="categories", blank=True)
 
     def __str__(self) -> str:
         return self.category

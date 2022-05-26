@@ -1,5 +1,8 @@
 {% extends "default.html" %}
 
+{% load socialaccount %}
+{% load i18n %}
+
 {% block content %}
 <h2>Sign In</h2>
 <center>
@@ -24,4 +27,19 @@
     <a href="{% url 'signup' %}">Create user</a>
 </div>
 
-{% endblock %}
+{% get_providers as socialaccount_providers %}
+
+{% if socialaccount_providers %}
+<div class="socialaccount_ballot">
+
+    <ul class="socialaccount_providers">
+        {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+    </ul>
+
+
+</div>
+{% endif %}
+
+<a href="{% provider_login_url 'google' %}" class="btn btn btn-danger btn-lg btn-block" role="button" aria-pressed="true">Sign in with Google</a>
+
+{% endblock content %}

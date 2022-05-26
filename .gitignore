@@ -1,3 +1,5 @@
+news_paper/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -127,3 +129,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+NewsPaper/NewsPaper/private_settings.py
+.vscode

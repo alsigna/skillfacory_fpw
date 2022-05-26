@@ -1,0 +1,19 @@
+{% extends "default.html" %}
+
+{% block title %}
+Подписки на категории
+{% endblock title %}
+
+{% block content %}
+<h1>Подписки на категории</h1>
+<form action="" method="POST">
+    <b style="color:red">{{ message }}</b>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <!-- <input type="submit" value="Save"> -->
+    <a class="btn btn-secondary" href="{{ return_url }}">Cancel</a>
+    <input class="btn btn-success" type="submit" value="Save" />
+
+</form>
+
+{% endblock content %}

@@ -1,10 +1,12 @@
-import django
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
+from django.views import View
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
 from .filters import PostFilter
-from .forms import PostCreateForm, PostEditForm
+from .forms import PostCreateForm, PostEditForm, SubscriptionEditForm
+from .mailer import send_new_post_mail
 from .models import Post
 
 
@@ -47,6 +49,13 @@ class PostCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         context["return_url"] = reverse("post_list")
         return context
 
+    def post(self, request, *args, **kwargs):
+        result = super().post(request, *args, **kwargs)
+
+        new_post = self.object
+        send_new_post_mail(new_post)
+        return result
+
 
 class PostUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     permission_required = ("news.change_post",)
@@ -66,3 +75,28 @@ class PostDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     template_name = "news/post_delete.html"
     success_url = reverse_lazy("post_list")
     context_object_name = "post"
+
+
+class SubscriptionUpdate(LoginRequiredMixin, View):
+    def get(self, request):
+        form = SubscriptionEditForm(instance=request.user)
+        return render(
+            request=request,
+            template_name="news/subscription_edit.html",
+            context={
+                "form": form,
+            },
+        )
+
+    def post(self, request):
+        form = SubscriptionEditForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+        return render(
+            request=request,
+            template_name="news/subscription_edit.html",
+            context={
+                "form": form,
+                "message": "Подписка успешно сохранена",
+            },
+        )

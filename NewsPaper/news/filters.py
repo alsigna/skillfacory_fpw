@@ -1,7 +1,7 @@
 from turtle import title
 from django import forms
 from django_filters import FilterSet, ModelChoiceFilter, DateFilter, ChoiceFilter
-from .models import Post, Author
+from .models import Post, Author, Category
 from .choices import CATEGORIES
 
 
@@ -19,6 +19,11 @@ class PostFilter(FilterSet):
     )
     post_type = ChoiceFilter(
         choices=CATEGORIES,
+        label="Post Type",
+        empty_label="Any",
+    )
+    category = ModelChoiceFilter(
+        queryset=Category.objects.all(),
         label="Category",
         empty_label="Any",
     )

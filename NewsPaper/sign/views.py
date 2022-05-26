@@ -7,6 +7,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import View
 from django.views.generic.edit import CreateView
 from news.models import Author, Post
+
 from .forms import UserForm
 
 
