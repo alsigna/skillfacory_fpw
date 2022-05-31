@@ -6,8 +6,11 @@ from django.views.generic import CreateView, DeleteView, DetailView, ListView, U
 
 from .filters import PostFilter
 from .forms import PostCreateForm, PostEditForm, SubscriptionEditForm
-from .mailer import send_new_post_mail
+
 from .models import Post
+from .tasks import send_new_post_mail
+
+# from .mailer import send_new_post_mail #! deprecated in d7.5
 
 
 class PostList(ListView):
@@ -53,7 +56,8 @@ class PostCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         result = super().post(request, *args, **kwargs)
 
         new_post = self.object
-        send_new_post_mail(new_post)
+        # send_new_post_mail(new_post)
+        send_new_post_mail.delay(new_post.pk)
         return result
 
 
