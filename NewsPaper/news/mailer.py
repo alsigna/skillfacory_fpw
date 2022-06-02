@@ -27,15 +27,33 @@ def _send_mail(post: Post, category: Category, user: User) -> None:
     msg.attach_alternative(html_content, "text/html")
     msg.send()
 
-    # send_mail(
-    #     subject=f"new post in {category.category}",
-    #     message=post.preview + ":" + post.get_absolute_url(),
-    #     from_email=EMAIL_FROM,
-    #     recipient_list=[user.email],
-    # )
+
+def _send_weekly_mail(posts, category) -> None:
+    for user in category.subscribers.all():
+        if user.email == "" or user.email is None:
+            return
+
+        html_content = render_to_string(
+            "news/email/weekly_posts.html",
+            {
+                "category": category,
+                "posts": posts,
+                "user": user,
+            },
+        )
+
+        msg = EmailMultiAlternatives(
+            subject=f"New posts in {category.category} for this week.",
+            body=html_content,
+            from_email=EMAIL_FROM,
+            to=[user.email],
+        )
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
 
 
-def send_new_post_mail(post: Post) -> None:
-    for category in post.category.all():
-        for user in category.subscribers.all():
-            _send_mail(post, category, user)
+#! deprecated in d7.5
+# def send_new_post_mail(post: Post) -> None:
+#     for category in post.category.all():
+#         for user in category.subscribers.all():
+#             _send_mail(post, category, user)
