@@ -133,3 +133,5 @@ NewsPaper/NewsPaper/private_settings.py
 .vscode
 *DS_Store
 .DS_Store
+cache_files/
+db.sqlite3

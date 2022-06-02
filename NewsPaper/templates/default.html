@@ -1,4 +1,6 @@
 {% load static %}
+{% load custom_filters %}
+{% load cache %}
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -57,6 +59,10 @@
 
     <div class="container">
         <div class="text-center mt-5">
+            {% cache 30 num_power %}
+            {{ 2|pow:1500000}}
+            {% endcache %}
+
             {% block content %}
             {% endblock content %}
         </div>

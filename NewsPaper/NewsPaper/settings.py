@@ -65,6 +65,10 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # per-site cache
+    # "django.middleware.cache.UpdateCacheMiddleware",
+    # "django.middleware.common.CommonMiddleware",
+    # "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 ROOT_URLCONF = "NewsPaper.urls"
@@ -174,3 +178,12 @@ CELERY_RESULT_BACKEND = "redis://localhost:6379"
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
+
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": BASE_DIR.joinpath("cache_files"),
+        "TIMEOUT": 60,
+    }
+}

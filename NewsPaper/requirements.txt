@@ -1,0 +1,9 @@
+flake8
+black
+django
+django-allauth
+django-apscheduler
+django-filter
+celery
+django-crispy-forms
+crispy_bootstrap5

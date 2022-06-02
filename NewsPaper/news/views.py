@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.cache import cache
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views import View
@@ -6,7 +7,6 @@ from django.views.generic import CreateView, DeleteView, DetailView, ListView, U
 
 from .filters import PostFilter
 from .forms import PostCreateForm, PostEditForm, SubscriptionEditForm
-
 from .models import Post
 from .tasks import send_new_post_mail
 
@@ -39,6 +39,18 @@ class PostDetail(DetailView):
     model = Post
     template_name = "news/post_details.html"
     context_object_name = "post"
+
+    def get_object(self, *args, **kwargs):
+        pk = self.kwargs["pk"]
+        obj = cache.get(f"post-{pk}")
+
+        if not obj:
+            print(f"post-{pk} NOT in cache")
+            obj = super().get_object(queryset=self.queryset)
+            cache.set(f"post-{pk}", obj)
+        else:
+            print(f"post-{pk} in cache")
+        return obj
 
 
 class PostCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):

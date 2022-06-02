@@ -24,3 +24,8 @@ def censor(text: str) -> str:
     blacklist_lower = r"\b|\b".join(list(map(str.lower, blacklist)))
     pattern = re.compile(r"\b" + blacklist_capital + r"\b|\b" + blacklist_lower + r"\b")
     return pattern.sub(repl, text)
+
+
+@register.filter()
+def pow(value: int, pow_: int) -> int:
+    return value**pow_
