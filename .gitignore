@@ -135,3 +135,4 @@ NewsPaper/NewsPaper/private_settings.py
 .DS_Store
 cache_files/
 *.sqlite3
+NewsPaper/db.sqlite3
