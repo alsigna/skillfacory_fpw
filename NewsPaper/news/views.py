@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.cache import cache
 from django.shortcuts import render
@@ -10,6 +12,13 @@ from .forms import PostCreateForm, PostEditForm, SubscriptionEditForm
 from .models import Post
 from .tasks import send_new_post_mail
 
+# logger = logging.getLogger("django.news.views")
+logger = logging.getLogger(f"django.NewsPaper.{__name__}")
+logger_template = logging.getLogger("django.template")
+logger_security = logging.getLogger("django.security")
+logger_server = logging.getLogger("django.server")
+
+
 # from .mailer import send_new_post_mail #! deprecated in d7.5
 
 
@@ -19,6 +28,19 @@ class PostList(ListView):
     template_name = "news/post_list.html"
     context_object_name = "posts"
     paginate_by = 3
+
+    def get(self, request, *args, **kwargs):
+        logger.debug("debug-message")
+        logger.info("info-message")
+        logger.warning("warning-message")
+        logger_security.info("security info message")
+        logger_server.error("test error message for email")
+        try:
+            raise Exception("fake exception for logging")
+        except Exception as exc:
+            logger.critical(str(exc), exc_info=exc.__traceback__)
+            logger_template.critical(str(exc), exc_info=exc.__traceback__)
+        return super().get(request, *args, **kwargs)
 
 
 class PostSearch(PostList):

@@ -12,7 +12,7 @@ from .models import Post
 
 @receiver(post_delete, sender=Post)
 def send_delete_mail(sender, instance, **kwargs) -> None:
-    admin = User.objects.get(username="alexander")
+    admin = User.objects.get(username="admin")
     send_mail(
         subject=f"post has been deleted",
         message=f"post has been deleted:\n {instance.preview}",
