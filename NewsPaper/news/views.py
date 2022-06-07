@@ -1,18 +1,21 @@
 import logging
 
+import pytz
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.cache import cache
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone, translation
+from django.utils.translation import gettext as _
 from django.views import View
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
 from .filters import PostFilter
 from .forms import PostCreateForm, PostEditForm, SubscriptionEditForm
-from .models import Post
+from .models import Category, Post
 from .tasks import send_new_post_mail
 
-# logger = logging.getLogger("django.news.views")
 logger = logging.getLogger(f"django.NewsPaper.{__name__}")
 logger_template = logging.getLogger("django.template")
 logger_security = logging.getLogger("django.security")
@@ -20,6 +23,30 @@ logger_server = logging.getLogger("django.server")
 
 
 # from .mailer import send_new_post_mail #! deprecated in d7.5
+
+
+class Index(View):
+    def get(self, request):
+        string = _("Hello world")
+        categories = Category.objects.all()
+
+        context = {
+            "string": string,
+            "categories": categories,
+            "current_time": timezone.now(),  # текущая TZ
+            "timezones": pytz.common_timezones,  #  добавляем в контекст все доступные TZ
+        }
+        return HttpResponse(
+            render(
+                request=request,
+                context=context,
+                template_name="news/lang.html",
+            ),
+        )
+
+    def post(self, request):
+        request.session["django_timezone"] = request.POST["timezone"]
+        return HttpResponseRedirect(reverse("lang_index"))
 
 
 class PostList(ListView):

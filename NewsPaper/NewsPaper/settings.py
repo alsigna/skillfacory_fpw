@@ -27,11 +27,12 @@ SECRET_KEY = "django-insecure-0eo^=@b$z+ykl%41#_60jdjlxg%d2+03v1i-b^==9m^=6r+0b=
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-
+INTERNAL_IPS = ["127.0.0.1"]
 
 # Application definition
 
 INSTALLED_APPS = [
+    "modeltranslation",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "news.apps.NewsConfig",
+    "debug_toolbar",
     # "accounts",
     "sign",
     "crispy_forms",
@@ -58,13 +60,16 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "NewsPaper.tz_middleware.TimezoneMiddleware",
     # per-site cache
     # "django.middleware.cache.UpdateCacheMiddleware",
     # "django.middleware.common.CommonMiddleware",
@@ -126,7 +131,12 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "ru"
+LANGUAGES = [
+    ("en", "English"),
+    ("ru", "Русский"),
+]
+# LANGUAGE_COOKIE_NAME = "language_id"
 
 TIME_ZONE = "UTC"
 
@@ -196,133 +206,138 @@ ADMINS = [
     ("Alexander Ignatov", "ignatov.alx@gmail.com"),
 ]
 
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "filters": {
-        "debug_info_only": {
-            "()": "NewsPaper.log_middleware.FilterLevels",
-            "filter_levels": ["DEBUG", "INFO"],
-        },
-        "warning_only": {
-            "()": "NewsPaper.log_middleware.FilterLevels",
-            "filter_levels": ["WARNING"],
-        },
-        "error_critical_only": {
-            "()": "NewsPaper.log_middleware.FilterLevels",
-            "filter_levels": ["ERROR", "CRITICAL"],
-        },
-        "require_debug_true": {
-            "()": "django.utils.log.RequireDebugTrue",
-        },
-        "require_debug_false": {
-            "()": "django.utils.log.RequireDebugFalse",
-        },
-    },
-    "formatters": {
-        "simple": {
-            "format": "%(name)s %(levelname)s %(module)s %(asctime)s: %(message)s",
-        },
-        "extended": {
-            "format": "%(name)s %(levelname)s %(module)s %(asctime)s %(pathname)s: %(message)s",
-        },
-        "with_trace": {
-            "format": "%(name)s %(levelname)s %(module)s %(asctime)s %(pathname)s: %(exc_info)s %(message)s",
-        },
-    },
-    "handlers": {
-        "console_debug_info": {
-            "class": "logging.StreamHandler",
-            "formatter": "simple",
-            "filters": [
-                "debug_info_only",
-                "require_debug_true",
-            ],
-        },
-        "console_warning": {
-            "class": "logging.StreamHandler",
-            "formatter": "extended",
-            "filters": [
-                "warning_only",
-                "require_debug_true",
-            ],
-        },
-        "console_error_critical": {
-            "class": "logging.StreamHandler",
-            "formatter": "with_trace",
-            "filters": [
-                "error_critical_only",
-                "require_debug_true",
-            ],
-        },
-        "file_general": {
-            "class": "logging.FileHandler",
-            "filename": "general.log",
-            "formatter": "simple",
-            "level": "INFO",
-            "filters": ["require_debug_false"],
-        },
-        "file_errors": {
-            "class": "logging.FileHandler",
-            "filename": "errors.log",
-            "formatter": "with_trace",
-            "level": "ERROR",
-        },
-        "file_security": {
-            "class": "logging.FileHandler",
-            "filename": "security.log",
-            "formatter": "extended",
-            "level": "INFO",
-        },
-        "mail_admins": {
-            "level": "ERROR",
-            "class": "django.utils.log.AdminEmailHandler",
-            "formatter": "simple",
-            "include_html": True,
-            "email_backend": "django.core.mail.backends.smtp.EmailBackend",
-            # "email_backend": "django.core.mail.backends.filebased.EmailBackend",
-        },
-    },
-    "loggers": {
-        "django": {
-            "handlers": [
-                "console_debug_info",
-                "console_warning",
-                "console_error_critical",
-                "file_general",
-            ],
-            "level": "DEBUG",
-        },
-        "django.request": {
-            "handlers": [
-                "file_errors",
-                "mail_admins",
-            ],
-            "propagate": True,
-            "level": "ERROR",
-        },
-        "django.server": {
-            "handlers": [
-                "file_errors",
-                "mail_admins",
-            ],
-            "propagate": True,
-            "level": "ERROR",
-        },
-        "django.template": {
-            "handlers": ["file_errors"],
-            "propagate": True,
-            "level": "ERROR",
-        },
-        "django.db_backends": {
-            "handlers": ["file_errors"],
-            "propagate": True,
-            "level": "ERROR",
-        },
-        "django.security": {
-            "handlers": ["file_security"],
-            "propagate": False,
-            "level": "INFO",
-        },
-    },
-}
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False,
+#     "filters": {
+#         "debug_info_only": {
+#             "()": "NewsPaper.log_middleware.FilterLevels",
+#             "filter_levels": ["DEBUG", "INFO"],
+#         },
+#         "warning_only": {
+#             "()": "NewsPaper.log_middleware.FilterLevels",
+#             "filter_levels": ["WARNING"],
+#         },
+#         "error_critical_only": {
+#             "()": "NewsPaper.log_middleware.FilterLevels",
+#             "filter_levels": ["ERROR", "CRITICAL"],
+#         },
+#         "require_debug_true": {
+#             "()": "django.utils.log.RequireDebugTrue",
+#         },
+#         "require_debug_false": {
+#             "()": "django.utils.log.RequireDebugFalse",
+#         },
+#     },
+#     "formatters": {
+#         "simple": {
+#             "format": "%(name)s %(levelname)s %(module)s %(asctime)s: %(message)s",
+#         },
+#         "extended": {
+#             "format": "%(name)s %(levelname)s %(module)s %(asctime)s %(pathname)s: %(message)s",
+#         },
+#         "with_trace": {
+#             "format": "%(name)s %(levelname)s %(module)s %(asctime)s %(pathname)s: %(exc_info)s %(message)s",
+#         },
+#     },
+#     "handlers": {
+#         "console_debug_info": {
+#             "class": "logging.StreamHandler",
+#             "formatter": "simple",
+#             "filters": [
+#                 "debug_info_only",
+#                 "require_debug_true",
+#             ],
+#         },
+#         "console_warning": {
+#             "class": "logging.StreamHandler",
+#             "formatter": "extended",
+#             "filters": [
+#                 "warning_only",
+#                 "require_debug_true",
+#             ],
+#         },
+#         "console_error_critical": {
+#             "class": "logging.StreamHandler",
+#             "formatter": "with_trace",
+#             "filters": [
+#                 "error_critical_only",
+#                 "require_debug_true",
+#             ],
+#         },
+#         "file_general": {
+#             "class": "logging.FileHandler",
+#             "filename": "general.log",
+#             "formatter": "simple",
+#             "level": "INFO",
+#             "filters": ["require_debug_false"],
+#         },
+#         "file_errors": {
+#             "class": "logging.FileHandler",
+#             "filename": "errors.log",
+#             "formatter": "with_trace",
+#             "level": "ERROR",
+#         },
+#         "file_security": {
+#             "class": "logging.FileHandler",
+#             "filename": "security.log",
+#             "formatter": "extended",
+#             "level": "INFO",
+#         },
+#         "mail_admins": {
+#             "level": "ERROR",
+#             "class": "django.utils.log.AdminEmailHandler",
+#             "formatter": "simple",
+#             "include_html": True,
+#             "email_backend": "django.core.mail.backends.smtp.EmailBackend",
+#             # "email_backend": "django.core.mail.backends.filebased.EmailBackend",
+#         },
+#     },
+#     "loggers": {
+#         "django": {
+#             "handlers": [
+#                 "console_debug_info",
+#                 "console_warning",
+#                 "console_error_critical",
+#                 "file_general",
+#             ],
+#             "level": "DEBUG",
+#         },
+#         "django.request": {
+#             "handlers": [
+#                 "file_errors",
+#                 "mail_admins",
+#             ],
+#             "propagate": True,
+#             "level": "ERROR",
+#         },
+#         "django.server": {
+#             "handlers": [
+#                 "file_errors",
+#                 "mail_admins",
+#             ],
+#             "propagate": True,
+#             "level": "ERROR",
+#         },
+#         "django.template": {
+#             "handlers": ["file_errors"],
+#             "propagate": True,
+#             "level": "ERROR",
+#         },
+#         "django.db_backends": {
+#             "handlers": ["file_errors"],
+#             "propagate": True,
+#             "level": "ERROR",
+#         },
+#         "django.security": {
+#             "handlers": ["file_security"],
+#             "propagate": False,
+#             "level": "INFO",
+#         },
+#     },
+# }
+
+
+USE_I18N = True  # D14.2
+
+LOCALE_PATHS = [BASE_DIR.joinpath("locale")]

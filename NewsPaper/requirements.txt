@@ -7,3 +7,5 @@ django-filter
 celery
 django-crispy-forms
 crispy_bootstrap5
+django-debug-toolbar
+django-modeltranslation

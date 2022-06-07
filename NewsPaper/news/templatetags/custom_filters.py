@@ -29,3 +29,8 @@ def censor(text: str) -> str:
 @register.filter()
 def pow(value: int, pow_: int) -> int:
     return value**pow_
+
+
+@register.filter()
+def to_int(value):
+    return int(value)
