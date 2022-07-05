@@ -1,0 +1,54 @@
+body {
+    width: 90%;
+    max-width: 900px;
+    margin: 0 auto;
+    font: .9em/1.2 Arial, Helvetica, sans-serif
+}
+
+.pic {
+    float: left;
+    width: 150px;
+    height: 100px;
+    padding: 5px;
+    margin-right: 10px;
+}
+
+.clear {
+    clear: both;
+}
+
+.header {
+    border: solid 1px black;
+    background-color: #101010;
+    color: white;
+}
+
+.menu {
+    text-align: right;
+}
+
+ul.menu li {
+    display: inline;
+    padding-left: 20px;
+}
+
+ul.menu li a {
+    color: white;
+    font-size: 20px;
+    text-decoration: none;
+}
+
+ul.menu li a:hover {
+    background-color: gray;
+    color: #101010;
+}
+
+.container {
+    padding-right: 40px;
+    padding-left: 40px;
+}
+
+.contacts div {
+    display: flex;
+    align-items: center;
+}
