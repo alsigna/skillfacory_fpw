@@ -168,3 +168,22 @@ console.log('arr_task7 :>> ', arr_task7);
 console.log('even :>> ', even);
 console.log('odd :>> ', odd);
 console.log('zero :>> ', zero);
+
+
+
+// Задание 8.
+// Создайте произвольный массив Map.
+// Получите его ключи и выведите в консоль все значения в виде «Ключ — Х, значение — Y».
+// Используйте шаблонные строки.
+
+console.warn("==== TASK 8 ===");
+
+let fruits = new Map([
+    ["apple", "green"],
+    ["strawberry", "red"],
+    ["blueberry", "blue"]
+]);
+
+for (const iterator of fruits) {
+    console.log(`«Ключ — ${iterator[0]}, значение — ${iterator[1]}»`);
+}
